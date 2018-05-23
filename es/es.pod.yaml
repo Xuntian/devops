@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: es-en
+  labels:
+    app: es-en
+spec:
+  containers:
+  - name: es-en
+    image: elasticsearch
+    ports:
+      - containerPort: 9200
+    volumeMounts: 
+      - name: nfs-es-en
+        mountPath: "/usr/share/elasticsearch"
+  volumes: 
+    - name: nfs-es-en
+      nfs: 
+        server: 10.28.18.13
+        path: "/mnt/es_en"

@@ -1,0 +1,13 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: gitlab-en
+spec: 
+  rules: 
+  - host: stgapi.keepwork.com
+    http: 
+      paths:
+      - path: /
+        backend:
+          serviceName: gitlab-en
+          servicePort: 80
