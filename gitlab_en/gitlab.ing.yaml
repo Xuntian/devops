@@ -1,10 +1,10 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: gitlab-en
+  name: gitlab-test
 spec: 
   rules: 
-  - host: stgapi.keepwork.com
+  - host: asd.com
     http: 
       paths:
       - path: /

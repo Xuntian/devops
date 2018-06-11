@@ -2,12 +2,14 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: es-en
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec: 
   rules: 
-  - host: es.keepwork.com
+  - host: es.123.com
     http: 
       paths:
-      - path: /
+      - path: /es
         backend:
           serviceName: es-en
           servicePort: 9200
