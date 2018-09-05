@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: storage-release
+spec:
+  rules:
+  - host: stage-storage.keepwork.com
+    http:
+      paths:
+      - backend:
+          serviceName: storage-release
+          servicePort: 8088
+status:
+  loadBalancer: {}

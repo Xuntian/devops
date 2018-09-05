@@ -1,0 +1,60 @@
+apiVersion: apps/v1beta2
+kind: DaemonSet
+metadata:
+  name: logstash
+  namespace: kube-system
+  labels:
+    k8s-app: logstash
+    kubernetes.io/cluster-service: "true"
+spec:
+  selector:
+    matchLabels:
+      k8s-app: logstash
+  template:
+    metadata:
+      labels:
+        k8s-app: logstash
+        kubernetes.io/cluster-service: "true"
+      annotations:
+        scheduler.alpha.kubernetes.io/critical-pod: ''
+    spec:
+      containers:
+      - name: logstash
+        image: logstash:5.6
+        volumeMounts:
+        - name: varlibdockercontainers
+          mountPath: /var/lib/docker/containers
+        - name: config-volume
+          mountPath: /config-dir
+#     nodeSelector:
+#       beta.kubernetes.io/fluentd-ds-ready: "true"
+#     terminationGracePeriodSeconds: 30
+      volumes:
+      - name: varlibdockercontainers
+        hostPath:
+          path: /var/lib/docker/containers
+      - name: config-volume
+        configMap:
+          name: logstash-config
+---
+apiVersion: v1
+kind: ConfigMap
+data: 
+  logstash.conf: 
+    input {
+      file {
+        path => ["/var/lib/docker/containers/*/*.log"]
+        type => "logstash"
+        start_position => "beginning"
+      }
+    }
+    output {
+      elasticsearch {
+        hosts => ["10.27.2.124:9200"]
+      }
+    }
+metadata:
+  name: logstash-config
+  namespace: kube-system
+  labels:
+    addonmanager.kubernetes.io/mode: Reconcile

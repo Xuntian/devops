@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: node-storage-release 
+  labels:
+    app: node-storage-release
+spec:
+  containers:
+  - name: node-storage-release
+    image: 10.28.18.13/xuntian/keepwork-storage-release:3
+    imagePullPolicy: IfNotPresent
+    ports:
+      - containerPort: 8088
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-storage-release
+spec:
+  ports:
+  - port: 8088
+    targetPort: 8088
+  selector: 
+    app: node-storage-release
+

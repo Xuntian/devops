@@ -1,0 +1,60 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: mysql-storage-stage-en
+  name: mysql-storage-stage-en
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-storage-stage-en
+  template: 
+    metadata: 
+      labels:
+        app: mysql-storage-stage-en
+    spec:
+      containers:
+      - image: mysql:5.7
+        imagePullPolicy: IfNotPresent
+        name: mysql-storage-stage-en
+        ports:
+          - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "123456"
+        - name: MYSQL_USER
+          value: "keepwork"
+        - name: MYSQL_PASSWORD
+          value: "123456"
+        volumeMounts:
+        - name: mysql-storage-stage-en
+          mountPath: "/var/lib/mysql"
+      volumes:
+        - name: mysql-storage-stage-en
+          persistentVolumeClaim:
+            claimName: mysql-storage-stage-en
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-storage-stage-en
+spec:
+  selector: 
+    app: mysql-storage-stage-en
+  type: NodePort
+  ports: 
+  - port: 3306
+    nodePort: 23307
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-storage-stage-en
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: nfs-deleted-storage
