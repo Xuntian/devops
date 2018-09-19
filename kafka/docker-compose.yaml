@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  redis:
+    image: redis:5.0-rc
+    volumes:
+      - ./config:/etc/redis
+      # - ./data:/data  一般为缓存数据，无需保存数据
+    ports:
+      - "6379:6379"
+    command: redis-server /etc/redis/redis.conf
