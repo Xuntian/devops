@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  elasticsearch:
+    image: elasticsearch:5.6
+    volumes:
+      - ./config:/usr/share/elasticsearch/config
+      - ./data:/usr/share/elasticsearch/data
+      - ./plugins:/usr/share/elasticsearch/plugins
+    ports:
+      - "9200:9200"
+  kibana: 
+    image: kibana:5.6
+    links: 
+      - elasticsearch:elasticsearch
+    ports:
+      - "5601:5601"

@@ -1,0 +1,14 @@
+version: "3.3"
+services:
+  mysql:
+    image: mysql:5.7.20
+    restart: always
+    volumes:
+      - ./conf.d:/etc/mysql/conf.d
+      - ./data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: keepwork
+      MYSQL_PASSWORD: "123456"
+    ports:
+      - "3306:3306"
