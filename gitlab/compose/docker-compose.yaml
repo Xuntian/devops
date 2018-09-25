@@ -1,0 +1,56 @@
+version: "3.3"
+
+networks:
+  gitlab_network:
+    driver: bridge
+
+services:
+  redis:   # only for cache, no volume 
+    image: redis
+    networks:
+      gitlab_network:
+        aliases:
+          - redis
+    restart: always
+
+  postgres:
+    image: postgres:9.6
+    networks:
+      gitlab_network:
+        aliases:
+          - db
+    volumes:
+      - ./postgre-data:/var/lib/postgresql/data
+      - ./postgre-conf:/etc/postgresql
+    environment:
+      - POSTGRES_USER=gitlab
+      - POSTGRES_PASSWORD=123456
+    restart: always
+
+  gitlab:
+    image: gitlab/gitlab-ce:9.4.3-ce.0
+    networks:
+      gitlab_network:
+        aliases:
+          - gitlab
+    ports:
+      - "443:443"
+      - "80:80"
+      - "22:22"
+    depends_on:
+      - redis
+      - postgres
+    # links:
+    #   # FIXME hardcode here, link to keepwork server
+    #   - keepwork-dev-server
+    #   - keepwork-test-server
+    volumes:
+      - ./gitlab-conf:/etc/gitlab
+      - ./gitlab-data:/gitlab-data
+      - ./gitlab-ssh/.ssh:/var/opt/gitlab/.ssh
+    environment:
+      # thanks https://stackoverflow.com/questions/40619582/how-can-i-escape-a-dollar-sign-in-a-docker-compose-file
+      # - DOLLAR=$$
+      - REDIS_HOST=redis
+      - DATABASE_HOST=db
+    restart: always
