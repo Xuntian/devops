@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  kafka-manager:
+    image: sheepkiller/kafka-manager
+    ports:
+      - "9000:9000"
+    environment:
+      ZK_HOSTS: 10.28.18.20:2181,10.28.18.21:2181,10.28.18.22:2181
+      APPLICATION_SECRET: keepwork
+#    volumes:
+#      - ./conf:
