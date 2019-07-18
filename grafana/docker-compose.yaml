@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  grafana: 
+    image: grafana/grafana
+    ports:
+      - "4000:3000"
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: iamadmin
