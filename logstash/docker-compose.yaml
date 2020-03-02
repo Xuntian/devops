@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  logstash:
+    image: logstash:7.5.0
+    volumes:
+      - ./config:/usr/share/logstash/config
+#      - ./data:/usr/share/elasticsearch/data
+#      - ./plugins:/usr/share/elasticsearch/plugins
+    ports:
+      - "8001:8001"
+    command:
+      - -f
+      - config/logstash.conf
