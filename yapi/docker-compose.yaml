@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  mongo:
+    image: mongo:4
+    volumes:
+      - ./config:/etc/mongo
+      - ./data:/data/db  
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 123456
+    command: mongod --config /etc/mongo/mongod.conf
+  yapi:
+    image: registry.cn-hangzhou.aliyuncs.com/anoy/yapi
